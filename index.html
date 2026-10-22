@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EduTrack - Student Task & Study Goal Hub. Manage homework, assignments, and exams with drag-and-drop and dark mode.">
+    <title>EduTrack — Student Task & Study Goal Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="ambient-glow glow-1" aria-hidden="true"></div>
+    <div class="ambient-glow glow-2" aria-hidden="true"></div>
+    <div class="ambient-glow glow-3" aria-hidden="true"></div>
+    <div class="gold-ambient-mesh" aria-hidden="true"></div>
+
+    <div class="app-layout">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-icon">🎓</div>
+                <div>
+                    <h1 class="brand-title">EduTrack</h1>
+                    <p class="brand-subtitle">Student Task & Study Goal Hub</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button type="button" id="theme-toggle" class="btn-icon" aria-label="Toggle Theme" title="Toggle dark/light mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button type="button" id="export-btn" class="btn-secondary" title="Export tasks JSON">
+                    <span>💾 Backup</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-grid" aria-label="Task Statistics">
+            <div class="stat-card">
+                <div class="stat-icon total-bg">📋</div>
+                <div><span class="stat-label">Total</span><span class="stat-value" id="stat-total-count">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon pending-bg">⏳</div>
+                <div><span class="stat-label">Pending</span><span class="stat-value" id="stat-pending-count">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon completed-bg">✅</div>
+                <div><span class="stat-label">Completed</span><span class="stat-value" id="stat-completed-count">0</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon overdue-bg">⚠️</div>
+                <div><span class="stat-label">Overdue</span><span class="stat-value" id="stat-overdue-count">0</span></div>
+            </div>
+        </section>
+
+        <!-- Progress Bar -->
+        <section class="progress-section" aria-label="Study Progress">
+            <div class="progress-header">
+                <div>
+                    <strong class="progress-title">Study Goal Completion</strong>
+                    <span class="progress-subtitle" id="progress-motto">Keep pushing forward!</span>
+                </div>
+                <span class="progress-percentage" id="progress-percent-label">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+        </section>
+
+        <!-- Task Creation Card -->
+        <section class="card form-card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Add New Task</h2>
+                    <span class="card-subtitle">Plan homework, assignments, and exam targets</span>
+                </div>
+                <button type="button" id="toggle-form-btn" class="btn-text-toggle">
+                    <span id="toggle-form-text">Collapse</span>
+                </button>
+            </div>
+            <form id="add-task-form" class="task-form">
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="task-title-input" class="form-label">Task Name <span class="required-star">*</span></label>
+                        <input type="text" id="task-title-input" class="form-control" placeholder="e.g., Calculus Problem Set #4" required maxlength="120" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="task-desc-input" class="form-label">Notes & Details <span class="optional-tag">(Optional)</span></label>
+                        <input type="text" id="task-desc-input" class="form-control" placeholder="e.g., Stewart Chapter 4, problems 12-25" maxlength="250" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-row meta-row">
+                    <div class="form-group">
+                        <label for="task-category-select" class="form-label">Category</label>
+                        <select id="task-category-select" class="form-control select-control">
+                            <option value="Homework">📚 Homework</option>
+                            <option value="Assignment">📝 Assignment</option>
+                            <option value="Exam">🎯 Exam</option>
+                            <option value="Personal">🌟 Personal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority-select" class="form-label">Priority</label>
+                        <select id="task-priority-select" class="form-control select-control">
+                            <option value="Medium">⚡ Medium</option>
+                            <option value="High">🔥 High</option>
+                            <option value="Urgent">🚨 Urgent</option>
+                            <option value="Low">🌱 Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="task-due-date" class="form-label">Due Date</label>
+                        <div class="due-date-wrapper">
+                            <input type="date" id="task-due-date" class="form-control date-control">
+                            <div class="quick-date-chips">
+                                <button type="button" class="chip-btn" data-date-offset="0">Today</button>
+                                <button type="button" class="chip-btn" data-date-offset="1">Tomorrow</button>
+                                <button type="button" class="chip-btn" data-date-offset="7">In 1 Week</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">➕ Add Task</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Search, Filters, & Sorting -->
+        <section class="controls-bar" aria-label="Task Controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input" placeholder="Search tasks by name or notes... (Press '/' to focus)" aria-label="Search tasks">
+                <button type="button" id="clear-search-btn" class="clear-search-btn" style="display: none;">&times;</button>
+            </div>
+            <div class="filters-and-sort">
+                <div class="filter-tabs" role="tablist">
+                    <button type="button" class="filter-tab active" data-filter="all">All</button>
+                    <button type="button" class="filter-tab" data-filter="pending">Pending</button>
+                    <button type="button" class="filter-tab" data-filter="completed">Completed</button>
+                    <button type="button" class="filter-tab" data-filter="overdue">Overdue</button>
+                </div>
+                <select id="category-filter-select" class="form-control filter-select" aria-label="Category Filter">
+                    <option value="all">All Categories</option>
+                    <option value="Homework">📚 Homework</option>
+                    <option value="Assignment">📝 Assignment</option>
+                    <option value="Exam">🎯 Exam</option>
+                    <option value="Personal">🌟 Personal</option>
+                </select>
+                <select id="sort-select" class="form-control filter-select" aria-label="Sort Order">
+                    <option value="manual">↕️ Custom Drag Order</option>
+                    <option value="dueDateAsc">📅 Due Date (Earliest)</option>
+                    <option value="dueDateDesc">📅 Due Date (Latest)</option>
+                    <option value="priority">🔥 Priority (High to Low)</option>
+                    <option value="nameAsc">🔤 Name (A - Z)</option>
+                    <option value="nameDesc">🔤 Name (Z - A)</option>
+                </select>
+                <button type="button" id="clear-completed-btn" class="btn-subtle-danger" title="Clear completed tasks">🗑️ Clear Completed</button>
+            </div>
+        </section>
+
+        <!-- Task List Area with Drag and Drop -->
+        <section class="task-list-section" aria-label="Task List">
+            <div class="drag-hint-banner" id="drag-hint">
+                <span>💡 <strong>Pro-Tip:</strong> Grab any task card by the grip handle (<strong>⋮⋮</strong>) to drag & reorder your priorities!</span>
+            </div>
+            <ul id="task-list" class="task-list" aria-live="polite"></ul>
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-illustration">🎯</div>
+                <h3 class="empty-title" id="empty-title">No tasks found</h3>
+                <p class="empty-desc" id="empty-desc">You are all caught up! Add a new task above.</p>
+                <button type="button" id="empty-reset-btn" class="btn-secondary" style="display: none;">Reset Filters</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>EduTrack &bull; Semantic HTML5, Vanilla CSS3 & Modern JavaScript &bull; LocalStorage Enabled</p>
+        </footer>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="edit-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Task</h3>
+                <button type="button" id="close-modal-btn" class="modal-close-btn">&times;</button>
+            </div>
+            <form id="edit-task-form" class="modal-form">
+                <input type="hidden" id="edit-task-id">
+                <div class="form-group">
+                    <label for="edit-task-title" class="form-label">Task Name <span class="required-star">*</span></label>
+                    <input type="text" id="edit-task-title" class="form-control" required maxlength="120">
+                </div>
+                <div class="form-group">
+                    <label for="edit-task-desc" class="form-label">Notes & Details</label>
+                    <input type="text" id="edit-task-desc" class="form-control" maxlength="250">
+                </div>
+                <div class="form-row meta-row">
+                    <div class="form-group">
+                        <label for="edit-task-category" class="form-label">Category</label>
+                        <select id="edit-task-category" class="form-control select-control">
+                            <option value="Homework">📚 Homework</option>
+                            <option value="Assignment">📝 Assignment</option>
+                            <option value="Exam">🎯 Exam</option>
+                            <option value="Personal">🌟 Personal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-task-priority" class="form-label">Priority</label>
+                        <select id="edit-task-priority" class="form-control select-control">
+                            <option value="Low">🌱 Low</option>
+                            <option value="Medium">⚡ Medium</option>
+                            <option value="High">🔥 High</option>
+                            <option value="Urgent">🚨 Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="edit-task-due-date" class="form-label">Due Date</label>
+                        <input type="date" id="edit-task-due-date" class="form-control date-control">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-edit-btn" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
